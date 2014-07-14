@@ -1,0 +1,25 @@
+%h1 Listing votes
+
+%table
+  %tr
+    %th Grand parent
+    %th Parent
+    %th Prabowo count
+    %th Jokowi count
+    %th
+    %th
+    %th
+
+  - @votes.each do |vote|
+    %tr
+      %td= vote.grand_parent_id
+      %td= vote.parent_id
+      %td= vote.prabowo_count
+      %td= vote.jokowi_count
+      %td= link_to 'Show', vote
+      %td= link_to 'Edit', edit_vote_path(vote)
+      %td= link_to 'Destroy', vote, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Vote', new_vote_path

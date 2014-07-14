@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  grand_parent_id: 1
+  parent_id: 1
+  prabowo_count: 1
+  jokowi_count: 1
+
+two:
+  grand_parent_id: 1
+  parent_id: 1
+  prabowo_count: 1
+  jokowi_count: 1
