@@ -2,7 +2,7 @@ class LocationsController < ApplicationController
   def index
     if params[:province] and params[:kabupaten]
       @view_mode = :kabupaten
-      @locations = Location.select('province_id', 'kabupaten_id', 'kecamatan_id',
+      @locations = Location.includes(:kecamatan).select('province_id', 'kabupaten_id', 'kecamatan_id',
                                    'sum(jokowi_count) as sum_jokowi_count', 'sum(prabowo_count) as sum_prabowo_count',
                                    'max(last_fetched_at) as max_last_fetched_at',
                                    'count(last_fetched_at) as fetched_count',
@@ -14,7 +14,7 @@ class LocationsController < ApplicationController
       @kabupaten_name = Kabupaten.find(params[:kabupaten]).name
     elsif params[:province]
       @view_mode = :province
-      @locations = Location.select('province_id', 'kabupaten_id',
+      @locations = Location.includes(:kabupaten).select('province_id', 'kabupaten_id',
                                    'sum(jokowi_count) as sum_jokowi_count', 'sum(prabowo_count) as sum_prabowo_count',
                                    'max(last_fetched_at) as max_last_fetched_at',
                                    'count(last_fetched_at) as fetched_count',
@@ -25,7 +25,7 @@ class LocationsController < ApplicationController
       @province_name = Province.find(params[:province]).name
     else
       @view_mode = :national
-      @locations = Location.select('province_id',
+      @locations = Location.includes(:province).select('province_id',
                                    'sum(jokowi_count) as sum_jokowi_count', 'sum(prabowo_count) as sum_prabowo_count',
                                    'max(last_fetched_at) as max_last_fetched_at',
                                    'count(last_fetched_at) as fetched_count',
