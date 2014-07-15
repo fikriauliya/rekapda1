@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  province_id: 1
+  kabupaten_id: 1
+  kecamatan_id: 1
+
+two:
+  province_id: 1
+  kabupaten_id: 1
+  kecamatan_id: 1

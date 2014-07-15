@@ -1,0 +1,72 @@
+= link_to "Nasional", locations_index_path
+>
+- if @view_mode == :province
+  = @province_name
+- if @view_mode == :kabupaten
+  = link_to @province_name, locations_index_path(:province => params[:province])
+  >
+  = @kabupaten_name
+%br
+
+%table{:cellspacing => 10}
+  %tr
+    %th Prabowo
+    %th Jokowi
+  %tr
+    %td= @prabowo_sum
+    %td= @jokowi_sum
+%hr
+-if @view_mode == :national
+  %table{:cellspacing => 10}
+    %tr
+      %th No
+      %th Provinsi
+      %th Prabowo
+      %th Jokowi
+      %th % Prabowo
+      %th % Jokowi
+      %th Last updated
+
+    - @locations.each_with_index do |location, index|
+      %tr
+        %td= index + 1
+        %td= link_to location.province.name, locations_index_path(:province => location.province.id)
+        = render :partial => 'locations/row_detail', locals: {location: location}
+    %tr
+      = render :partial => 'locations/table_total'
+-elsif @view_mode == :province
+  %table{:cellspacing => 10}
+    %tr
+      %th No
+      %th Kabupaten
+      %th Prabowo
+      %th Jokowi
+      %th % Prabowo
+      %th % Jokowi
+      %th Last updated
+
+    - @locations.each_with_index do |location, index|
+      %tr
+        %td= index + 1
+        %td= link_to location.kabupaten.name, locations_index_path(:province => params[:province], :kabupaten => location.kabupaten.id)
+        = render :partial => 'locations/row_detail', locals: {location: location}
+    %tr
+      = render :partial => 'locations/table_total'
+-elsif @view_mode == :kabupaten
+  %table{:cellspacing => 10}
+    %tr
+      %th No
+      %th Kecamatan
+      %th Prabowo
+      %th Jokowi
+      %th % Prabowo
+      %th % Jokowi
+      %th Last updated
+
+    - @locations.each_with_index do |location, index|
+      %tr
+        %td= index + 1
+        %td= link_to location.kecamatan.name, location.detail_url
+        = render :partial => 'locations/row_detail', locals: {location: location}
+    %tr
+      = render :partial => 'locations/table_total'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140714104843) do
+ActiveRecord::Schema.define(version: 20140715044635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,32 @@ ActiveRecord::Schema.define(version: 20140714104843) do
     t.integer  "to_be_updated_index"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "kabupatens", id: false, force: true do |t|
+    t.integer "id"
+    t.string  "name"
+  end
+
+  create_table "kecamatans", id: false, force: true do |t|
+    t.integer "id"
+    t.string  "name"
+  end
+
+  create_table "locations", force: true do |t|
+    t.integer  "province_id"
+    t.integer  "kabupaten_id"
+    t.integer  "kecamatan_id"
+    t.integer  "prabowo_count",   default: 0
+    t.integer  "jokowi_count",    default: 0
+    t.datetime "last_fetched_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "provinces", id: false, force: true do |t|
+    t.integer "id"
+    t.string  "name"
   end
 
   create_table "votes", force: true do |t|

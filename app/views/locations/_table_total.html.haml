@@ -1,0 +1,17 @@
+%td
+%td
+%td.right-aligned{"style" => yellow_background_for_max(@prabowo_sum, @jokowi_sum)}
+  = @prabowo_sum
+%td.right-aligned{"style" => yellow_background_for_max(@jokowi_sum, @prabowo_sum)}
+  = @jokowi_sum
+%td.right-aligned{"style" => yellow_background_for_max(@prabowo_sum, @jokowi_sum)}
+  = (@prabowo_sum * 100 / ((@prabowo_sum + @jokowi_sum) * 1.0)).round(2)
+  \%
+%td.right-aligned{"style" => yellow_background_for_max(@jokowi_sum, @prabowo_sum)}
+  = (@jokowi_sum * 100 / ((@prabowo_sum + @jokowi_sum) * 1.0)).round(2)
+  \%
+%td
+%td
+  = @fetched_count_sum
+  \/
+  = @total_count_sum
