@@ -1,7 +1,7 @@
 namespace :scheduler do
   desc "This task is called by the Heroku scheduler add-on"
   task :fetch_data => :environment do
-    puts "Update..."
+    puts "Fetch..."
 
     100.times do
       counter = FetchStatus.first.to_be_updated_index
@@ -30,6 +30,12 @@ namespace :scheduler do
       total_votes = last_table.xpath("tr[6]/td")[-1].children.to_s.to_i
 
       existing_vote = Vote.where(:grand_parent_id => grand_parent, :parent_id => parent).first_or_create(parent_id: parent, grand_parent_id: grand_parent, jokowi_count: jokowi_votes, prabowo_count: prabowo_votes)
+      if existing_vote.prabowo_count != prabowo_votes or existing_vote.jokowi_count != jokowi_votes
+        puts "Update..."
+        existing_vote.prabowo_count = prabowo_votes
+        existing_vote.jokowi_count = jokowi_votes
+        existing_vote.save
+      end
 
       puts "Grand Parent: " + grand_parent.to_s
       puts "Parent: " + parent.to_s

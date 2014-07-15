@@ -5,6 +5,8 @@ class VotesController < ApplicationController
   # GET /votes.json
   def index
     @votes = Vote.all
+    @prabowo_sum = @votes.sum(:prabowo_count)
+    @jokowi_sum = @votes.sum(:jokowi_count)
   end
 
   private
