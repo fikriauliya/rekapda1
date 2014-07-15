@@ -10,7 +10,7 @@
   \%
 %td
   - if location.max_last_fetched_at
-    = (location.max_last_fetched_at.strftime("%d %b, %H:%M:%S"))
+    = (location.max_last_fetched_at.in_time_zone("Jakarta").strftime("%d %b, %H:%M:%S"))
   - else
     Pending..
 %td
