@@ -3,7 +3,7 @@ namespace :scheduler do
   task :fetch_data => :environment do
     puts "Fetch..."
 
-    100.times do
+    500.times do
       counter = FetchStatus.first.to_be_updated_index
       if counter > 8225 then
         counter = 0
