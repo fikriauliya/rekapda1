@@ -43,5 +43,6 @@ gem 'nokogiri'
 gem 'haml'
 gem 'haml-rails'
 gem 'parallel'
+gem 'gon'
 
 ruby "2.0.0"

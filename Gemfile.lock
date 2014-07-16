@@ -38,6 +38,9 @@ GEM
     coffee-script-source (1.7.1)
     erubis (2.7.0)
     execjs (2.2.1)
+    gon (5.0.4)
+      actionpack (>= 2.3.0)
+      json
     haml (4.0.5)
       tilt
     haml-rails (0.5.3)
@@ -65,12 +68,9 @@ GEM
     minitest (5.4.0)
     multi_json (1.10.1)
     multi_xml (0.5.5)
-    nokogiri (1.6.2.1)
-      mini_portile (= 0.6.0)
     nokogiri (1.6.2.1-x86-mingw32)
       mini_portile (= 0.6.0)
     parallel (1.0.0)
-    pg (0.17.1)
     pg (0.17.1-x86-mingw32)
     polyglot (0.3.5)
     rack (1.5.2)
@@ -133,6 +133,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
+  gon
   haml
   haml-rails
   httparty

@@ -12,6 +12,8 @@ class LocationsController < ApplicationController
           order(:kecamatan_id)
       @province_name = Province.find(params[:province]).name
       @kabupaten_name = Kabupaten.find(params[:kabupaten]).name
+
+      gon.id = params[:kabupaten]
     elsif params[:province]
       @view_mode = :province
       @locations = Location.includes(:kabupaten).select('province_id', 'kabupaten_id',
@@ -23,6 +25,8 @@ class LocationsController < ApplicationController
           group(:province_id, :kabupaten_id).
           order(:kabupaten_id)
       @province_name = Province.find(params[:province]).name
+
+      gon.id = params[:province]
     else
       @view_mode = :national
       @locations = Location.includes(:province).select('province_id',
@@ -32,6 +36,7 @@ class LocationsController < ApplicationController
                                    'count(*) as total_count').
           group(:province_id).
           order(:province_id)
+      gon.id = 0
     end
 
     @prabowo_sum = @locations.inject(0) { |sum, val| sum += val.sum_prabowo_count }

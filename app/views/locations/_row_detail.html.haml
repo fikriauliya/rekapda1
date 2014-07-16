@@ -1,16 +1,18 @@
 %td.right-aligned
   = number_with_delimiter(location.sum_prabowo_count, delimiter: ",")
+%td.right-aligned.c1_prabowo
 %td.right-aligned{"style" => yellow_background_for_max(location.sum_prabowo_count, location.sum_jokowi_count)}
   = (location.sum_prabowo_count * 100 / ((location.sum_prabowo_count + location.sum_jokowi_count) * 1.0)).round(2)
   \%
 %td.right-aligned
   = number_with_delimiter(location.sum_jokowi_count, delimiter: ",")
+%td.right-aligned.c1_jokowi
 %td.right-aligned{"style" => yellow_background_for_max(location.sum_jokowi_count, location.sum_prabowo_count)}
   = (location.sum_jokowi_count * 100 / ((location.sum_prabowo_count + location.sum_jokowi_count) * 1.0)).round(2)
   \%
 %td
   - if location.max_last_fetched_at
-    = (location.max_last_fetched_at.in_time_zone("Jakarta").strftime("%d %b, %H:%M:%S"))
+    = (location.max_last_fetched_at.in_time_zone("Jakarta").strftime("%d %b, %H:%M"))
   - else
     Pending..
 %td

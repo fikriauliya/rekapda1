@@ -27,6 +27,10 @@
   %br
   Source code program ini bisa didownload di
   =link_to "https://github.com/fikriauliya/rekapda1", "https://github.com/fikriauliya/rekapda1"
+  %br
+  %b
+    [Update]: kolom C1 adalah hasil input C1 dari
+    =link_to "http://kawalpemilu.org", "http://kawalpemilu.org"
 %table{:cellspacing => 10}
   %tr
     %th Prabowo
@@ -39,35 +43,40 @@
       .addthis_sharing_toolbox
 
 %hr
-%div{"style" => "width:1000px; float:left"}
+%div{"style" => "width:1100px; float:left"}
   -if @view_mode == :national
-    %table{:cellspacing => 10}
+    %table#rekap{:cellspacing => 10}
       %tr
         %th No
         %th Provinsi
         %th Prabowo
+        %th C1
         %th %
         %th Jokowi
+        %th C1
         %th %
-        %th Last updated (WIB)
+        %th Updated
 
       - @locations.each_with_index do |location, index|
         %tr
           %td= index + 1
-          %td= link_to location.province.name, locations_index_path(:province => location.province.id)
+          %td
+            = link_to location.province.name, locations_index_path(:province => location.province.id)
           = render :partial => 'locations/row_detail', locals: {location: location}
       %tr
         = render :partial => 'locations/table_total'
   -elsif @view_mode == :province
-    %table{:cellspacing => 10}
+    %table#rekap{:cellspacing => 10}
       %tr
         %th No
         %th Kabupaten
         %th Prabowo
+        %th C1
         %th %
         %th Jokowi
+        %th C1
         %th %
-        %th Last updated (WIB)
+        %th Updated
 
       - @locations.each_with_index do |location, index|
         %tr
@@ -77,15 +86,17 @@
       %tr
         = render :partial => 'locations/table_total'
   -elsif @view_mode == :kabupaten
-    %table{:cellspacing => 10}
+    %table#rekap{:cellspacing => 10}
       %tr
         %th No
         %th Kecamatan
         %th Prabowo
+        %th C1
         %th %
         %th Jokowi
+        %th C1
         %th %
-        %th Last updated (WIB)
+        %th Updated
 
       - @locations.each_with_index do |location, index|
         %tr
