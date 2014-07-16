@@ -2,7 +2,7 @@ namespace :scheduler do
   desc "This task is called by the Heroku scheduler add-on"
   task :fetch_votes => :environment do
     puts "Fetch..."
-    max_counter = Location.count
+    max_counter = Location.count/6
 
     max_counter.times do
       begin
