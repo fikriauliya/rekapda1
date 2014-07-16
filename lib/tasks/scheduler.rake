@@ -35,8 +35,9 @@ namespace :scheduler do
   desc "Fetch not retrieved votes only"
   task :fetch_not_retrieved_votes => :environment do
     puts "Fetch..."
-    @locations = Location.where(:last_fetched_at => nil)
-    @locations.each do |location|
+    @locations = Location.includes([:kecamatan, :province, :kabupaten]).where(:last_fetched_at => nil)
+
+    Parallel.each(@locations, :in_threads => 8) do |location|
       update_votes(location)
     end
     puts "Done.."
