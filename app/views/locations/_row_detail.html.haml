@@ -1,10 +1,10 @@
 %td.right-aligned
-  = location.sum_prabowo_count
+  = number_with_delimiter(location.sum_prabowo_count, delimiter: ",")
 %td.right-aligned{"style" => yellow_background_for_max(location.sum_prabowo_count, location.sum_jokowi_count)}
   = (location.sum_prabowo_count * 100 / ((location.sum_prabowo_count + location.sum_jokowi_count) * 1.0)).round(2)
   \%
 %td.right-aligned
-  = location.sum_jokowi_count
+  = number_with_delimiter(location.sum_jokowi_count, delimiter: ",")
 %td.right-aligned{"style" => yellow_background_for_max(location.sum_jokowi_count, location.sum_prabowo_count)}
   = (location.sum_jokowi_count * 100 / ((location.sum_prabowo_count + location.sum_jokowi_count) * 1.0)).round(2)
   \%

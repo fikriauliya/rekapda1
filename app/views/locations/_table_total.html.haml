@@ -1,12 +1,12 @@
 %td
 %td
 %td.right-aligned
-  = @prabowo_sum
+  = number_with_delimiter(@prabowo_sum, delimiter: ",")
 %td.right-aligned{"style" => yellow_background_for_max(@prabowo_sum, @jokowi_sum)}
   = (@prabowo_sum * 100 / ((@prabowo_sum + @jokowi_sum) * 1.0)).round(2)
   \%
 %td.right-aligned
-  = @jokowi_sum
+  = number_with_delimiter(@jokowi_sum, delimiter: ",")
 %td.right-aligned{"style" => yellow_background_for_max(@jokowi_sum, @prabowo_sum)}
   = (@jokowi_sum * 100 / ((@prabowo_sum + @jokowi_sum) * 1.0)).round(2)
   \%
