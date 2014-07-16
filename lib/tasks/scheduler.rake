@@ -1,54 +1,62 @@
 namespace :scheduler do
+  def update_votes(location)
+    begin
+      grand_parent = location.kabupaten_id
+      parent = location.kecamatan_id
+      puts("Fetch #{location.province.name} #{location.kabupaten.name} > #{location.kecamatan.name}")
+
+      response = HTTParty.get("http://pilpres2014.kpu.go.id/da1.php?cmd=select&grandparent=#{grand_parent}&parent=#{parent}")
+      # puts response.body
+      doc = Nokogiri::HTML(response.body)
+      last_table = doc.search('table').last
+
+      # table_headers = last_table.xpath("tr[3]/th")
+      # city_names = table_headers[2..-1].map { |h| h.children.to_s}
+      prabowo_votes = last_table.xpath("tr[4]/td")[-1].children.to_s.to_i
+      jokowi_votes = last_table.xpath("tr[5]/td")[-1].children.to_s.to_i
+      total_votes = last_table.xpath("tr[6]/td")[-1].children.to_s.to_i
+      puts "Prabowo: " + prabowo_votes.to_s
+      puts "Jokowi: " + jokowi_votes.to_s
+      puts "Total: " + total_votes.to_s
+
+      location.last_fetched_at = Time.now
+
+      if location.prabowo_count != prabowo_votes or location.jokowi_count != jokowi_votes
+        puts "Update..."
+        location.prabowo_count = prabowo_votes
+        location.jokowi_count = jokowi_votes
+        location.save
+      end
+    rescue Exception => e
+      puts e.message
+    end
+  end
+
+  desc "Fetch not retrieved votes only"
+  task :fetch_not_retrieved_votes => :environment do
+    puts "Fetch..."
+    @locations = Location.where(:last_fetched_at => nil)
+    @locations.each do |location|
+      update_votes(location)
+    end
+    puts "Done.."
+  end
+
   desc "This task is called by the Heroku scheduler add-on"
   task :fetch_votes => :environment do
     puts "Fetch..."
     max_counter = Location.count/6
 
     max_counter.times do
-      begin
-        counter = FetchStatus.first.to_be_updated_index
-        if counter > max_counter then
-          counter = 0
-        end
-
-        puts "Counter #{counter}"
-        location = Location.offset(counter).first
-        grand_parent, parent = location.kabupaten_id, location.kecamatan_id
-
-        puts "Grand Parent: " + grand_parent.to_s
-        puts "Parent: " + parent.to_s
-
-        # grand_parent = 1492
-        # parent = 1493
-        response = HTTParty.get("http://pilpres2014.kpu.go.id/da1.php?cmd=select&grandparent=#{grand_parent}&parent=#{parent}")
-        # puts response.body
-        doc = Nokogiri::HTML(response.body)
-        last_table = doc.search('table').last
-
-        # table_headers = last_table.xpath("tr[3]/th")
-        # city_names = table_headers[2..-1].map { |h| h.children.to_s}
-        prabowo_votes = last_table.xpath("tr[4]/td")[-1].children.to_s.to_i
-        jokowi_votes = last_table.xpath("tr[5]/td")[-1].children.to_s.to_i
-        total_votes = last_table.xpath("tr[6]/td")[-1].children.to_s.to_i
-        puts "Prabowo: " + prabowo_votes.to_s
-        puts "Jokowi: " + jokowi_votes.to_s
-        puts "Total: " + total_votes.to_s
-
-        location.last_fetched_at = Time.now
-
-        if location.prabowo_count != prabowo_votes or location.jokowi_count != jokowi_votes
-          puts "Update..."
-          location.prabowo_count = prabowo_votes
-          location.jokowi_count = jokowi_votes
-          location.save
-        end
-      rescue Exception => e
-        puts e.message
-      ensure
-        FetchStatus.first.update(:to_be_updated_index => counter + 1)
+      counter = FetchStatus.first.to_be_updated_index
+      if counter > max_counter then
+        counter = 0
       end
-    end
 
+      location = Location.offset(counter).first
+      update_votes(location)
+      FetchStatus.first.update(:to_be_updated_index => location.id + 1)
+    end
     puts "Done.."
   end
 
