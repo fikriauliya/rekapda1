@@ -3,7 +3,7 @@ namespace :scheduler do
     begin
       grand_parent = location.kabupaten_id
       parent = location.kecamatan_id
-      puts("Fetch #{location.province.name} #{location.kabupaten.name} > #{location.kecamatan.name}")
+      puts("Fetch #{location.province.name} > #{location.kabupaten.name} > #{location.kecamatan.name}")
 
       response = HTTParty.get("http://pilpres2014.kpu.go.id/da1.php?cmd=select&grandparent=#{grand_parent}&parent=#{parent}")
       # puts response.body
