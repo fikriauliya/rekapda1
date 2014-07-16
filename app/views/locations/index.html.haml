@@ -17,20 +17,27 @@
 - if @view_mode == :kabupaten
   = link_to @province_name, locations_index_path(:province => params[:province])
   >
-  = @kabupaten_name
+  = @kabupaten_nam
 %br
-%p{"style"=>"width:1200px"}
+%p
   DA1 adalah hasil rekapitulasi suara per kecamatan yang merupakan hasil yang telah diplenokan pada tingkatannya.
+  DA1 berisi rekapitulasi beberapa formulir C1 pada tingkat kecamatan
 %p
   Data ini diambil dari Website KPU berikut:
   =link_to "http://pilpres2014.kpu.go.id/da1.php", "http://pilpres2014.kpu.go.id/da1.php"
-  %br
-  Source code program ini bisa didownload di
+  \. Data diupdate secara otomatis oleh program setiap 1 jam
+  \. Untuk transparansi, source code program ini bisa didownload di
   =link_to "https://github.com/fikriauliya/rekapda1", "https://github.com/fikriauliya/rekapda1"
+  \. Tidak ada manipulasi data, silakan dicek codenya atau dicross check langsung dengan data di website KPU
   %br
+%p
   %b
-    [Update]: kolom C1 adalah hasil input C1 dari
+    [Update] Kolom C1 adalah hasil input C1 dari
     =link_to "http://kawalpemilu.org", "http://kawalpemilu.org"
+  \. KawalPemilu adalah website crowdsourcing di mana komunitas menginput file scan C1 (step sebelum DA1) secara keroyokan.
+  Sementara formulir DA1 adalah rekapitulasi input C1 yang dilakukan oleh KPU, di mana KPU bisa jadi telah mengkoreksi sebagian kesalahan pada C1.
+  Jika ada perbedaan dalam keduanya, bisa dicek data hingga level kecamatan, kemudian dibandingkan untuk saling mengkoreksi.
+
 %table{:cellspacing => 10}
   %tr
     %th Prabowo
@@ -56,6 +63,7 @@
         %th C1
         %th %
         %th Updated
+        %th{'colspan' => 2} Formulir lengkap
 
       - @locations.each_with_index do |location, index|
         %tr
@@ -77,6 +85,7 @@
         %th C1
         %th %
         %th Updated
+        %th{'colspan' => 2} Formulir lengkap
 
       - @locations.each_with_index do |location, index|
         %tr
@@ -97,6 +106,7 @@
         %th C1
         %th %
         %th Updated
+        %th{'colspan' => 2} Formulir lengkap
 
       - @locations.each_with_index do |location, index|
         %tr
