@@ -1,3 +1,15 @@
+/ Go to www.addthis.com/dashboard to customize your tools
+%script{src: "//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53bbbc685826fb13", type: "text/javascript"}
+#fb-root
+:javascript
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&appId=668242776602769&version=v2.0";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
 = link_to "Nasional", locations_index_path
 >
 - if @view_mode == :province
@@ -7,66 +19,80 @@
   >
   = @kabupaten_name
 %br
-
+%p{"style"=>"width:1200px"}
+  DA1 adalah hasil rekapitulasi suara per kecamatan yang merupakan hasil yang telah diplenokan pada tingkatannya.
+%p
+  Data ini diambil dari Website KPU berikut:
+  =link_to "http://pilpres2014.kpu.go.id/da1.php", "http://pilpres2014.kpu.go.id/da1.php"
+  %br
+  Source code program ini bisa didownload di
+  =link_to "https://github.com/fikriauliya/rekapda1", "https://github.com/fikriauliya/rekapda1"
 %table{:cellspacing => 10}
   %tr
     %th Prabowo
     %th Jokowi
+    %th
   %tr
     %td= @prabowo_sum
     %td= @jokowi_sum
+    %td
+      .addthis_sharing_toolbox
+
 %hr
--if @view_mode == :national
-  %table{:cellspacing => 10}
-    %tr
-      %th No
-      %th Provinsi
-      %th Prabowo
-      %th %
-      %th Jokowi
-      %th %
-      %th Last updated (WIB)
-
-    - @locations.each_with_index do |location, index|
+%div{"style" => "width:1000px; float:left"}
+  -if @view_mode == :national
+    %table{:cellspacing => 10}
       %tr
-        %td= index + 1
-        %td= link_to location.province.name, locations_index_path(:province => location.province.id)
-        = render :partial => 'locations/row_detail', locals: {location: location}
-    %tr
-      = render :partial => 'locations/table_total'
--elsif @view_mode == :province
-  %table{:cellspacing => 10}
-    %tr
-      %th No
-      %th Kabupaten
-      %th Prabowo
-      %th %
-      %th Jokowi
-      %th %
-      %th Last updated (WIB)
+        %th No
+        %th Provinsi
+        %th Prabowo
+        %th %
+        %th Jokowi
+        %th %
+        %th Last updated (WIB)
 
-    - @locations.each_with_index do |location, index|
+      - @locations.each_with_index do |location, index|
+        %tr
+          %td= index + 1
+          %td= link_to location.province.name, locations_index_path(:province => location.province.id)
+          = render :partial => 'locations/row_detail', locals: {location: location}
       %tr
-        %td= index + 1
-        %td= link_to location.kabupaten.name, locations_index_path(:province => params[:province], :kabupaten => location.kabupaten.id)
-        = render :partial => 'locations/row_detail', locals: {location: location}
-    %tr
-      = render :partial => 'locations/table_total'
--elsif @view_mode == :kabupaten
-  %table{:cellspacing => 10}
-    %tr
-      %th No
-      %th Kecamatan
-      %th Prabowo
-      %th %
-      %th Jokowi
-      %th %
-      %th Last updated (WIB)
+        = render :partial => 'locations/table_total'
+  -elsif @view_mode == :province
+    %table{:cellspacing => 10}
+      %tr
+        %th No
+        %th Kabupaten
+        %th Prabowo
+        %th %
+        %th Jokowi
+        %th %
+        %th Last updated (WIB)
 
-    - @locations.each_with_index do |location, index|
+      - @locations.each_with_index do |location, index|
+        %tr
+          %td= index + 1
+          %td= link_to location.kabupaten.name, locations_index_path(:province => params[:province], :kabupaten => location.kabupaten.id)
+          = render :partial => 'locations/row_detail', locals: {location: location}
       %tr
-        %td= index + 1
-        %td= link_to location.kecamatan.name, location.detail_url
-        = render :partial => 'locations/row_detail', locals: {location: location}
-    %tr
-      = render :partial => 'locations/table_total'
+        = render :partial => 'locations/table_total'
+  -elsif @view_mode == :kabupaten
+    %table{:cellspacing => 10}
+      %tr
+        %th No
+        %th Kecamatan
+        %th Prabowo
+        %th %
+        %th Jokowi
+        %th %
+        %th Last updated (WIB)
+
+      - @locations.each_with_index do |location, index|
+        %tr
+          %td= index + 1
+          %td= link_to location.kecamatan.name, location.detail_url
+          = render :partial => 'locations/row_detail', locals: {location: location}
+      %tr
+        = render :partial => 'locations/table_total'
+%div{"style" => "float:left"}
+  .fb-comments{"data-colorscheme" => "light", "data-href" => "http://rekapda1.herokuapp.com", "data-numposts" => "5"}
