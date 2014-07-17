@@ -76,6 +76,11 @@
   -elsif @view_mode == :province
     %table#rekap{:cellspacing => 10}
       %tr
+        %th
+        %th
+        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Prabowo
+        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Jokowi
+      %tr
         %th No
         %th Kabupaten
         %th DB1
@@ -98,6 +103,11 @@
   -elsif @view_mode == :kabupaten
     %table#rekap{:cellspacing => 10}
       %tr
+        %th
+        %th
+        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Prabowo
+        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Jokowi
+      %tr
         %th No
         %th Kecamatan
         %th DB1
@@ -118,9 +128,10 @@
       %tr
         = render :partial => 'locations/table_total'
 %div{"style" => "float:left"}
-  %h4 Supported by
-  = link_to "https://kaunishijab.com/" do
-    = image_tag "kaunis.jpg"
+  %div
+    %h4 Supported by
+    = link_to "https://kaunishijab.com/" do
+      = image_tag "kaunis.jpg"
   %br
   .fb-comments{"data-colorscheme" => "light", "data-href" => "http://rekapda1.herokuapp.com", "data-numposts" => "5"}
 
