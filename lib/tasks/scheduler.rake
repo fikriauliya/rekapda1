@@ -79,7 +79,7 @@ namespace :scheduler do
   desc "Fetch retrieved db1 only"
   task :fetch_retrieved_db1 => :environment do
     puts "Fetch..."
-    @db1s = Db1.includes([:province, :kabupaten]).where(:last_fetched_at != nil)
+    @db1s = Db1.includes([:province, :kabupaten]).where('last_fetched_at IS NOT NULL')
 
     Parallel.each(@db1s, :in_threads => 8) do |db1|
       update_db1(db1)
@@ -101,7 +101,7 @@ namespace :scheduler do
   desc "Fetch retrieved da1 only"
   task :fetch_retrieved_votes => :environment do
     puts "Fetch..."
-    @locations = Location.includes([:kecamatan, :province, :kabupaten]).where(:last_fetched_at != nil)
+    @locations = Location.includes([:kecamatan, :province, :kabupaten]).where('last_fetched_at IS NOT NULL')
 
     Parallel.each(@locations, :in_threads => 8) do |location|
       update_votes(location)
