@@ -76,10 +76,32 @@ namespace :scheduler do
     puts "Done.."
   end
 
-  desc "Fetch not retrieved votes only"
+  desc "Fetch retrieved db1 only"
+  task :fetch_retrieved_db1 => :environment do
+    puts "Fetch..."
+    @db1s = Db1.includes([:province, :kabupaten]).where(:last_fetched_at != nil)
+
+    Parallel.each(@db1s, :in_threads => 8) do |db1|
+      update_db1(db1)
+    end
+    puts "Done.."
+  end
+
+  desc "Fetch not retrieved da1 only"
   task :fetch_not_retrieved_votes => :environment do
     puts "Fetch..."
     @locations = Location.includes([:kecamatan, :province, :kabupaten]).where(:last_fetched_at => nil)
+
+    Parallel.each(@locations, :in_threads => 8) do |location|
+      update_votes(location)
+    end
+    puts "Done.."
+  end
+
+  desc "Fetch retrieved da1 only"
+  task :fetch_retrieved_votes => :environment do
+    puts "Fetch..."
+    @locations = Location.includes([:kecamatan, :province, :kabupaten]).where(:last_fetched_at != nil)
 
     Parallel.each(@locations, :in_threads => 8) do |location|
       update_votes(location)
@@ -108,6 +130,18 @@ namespace :scheduler do
   desc "Fetch indexes"
   task :fetch_indexes do
     fetch_province
+  end
+
+  desc "Fetch all unretrieved votes"
+  task :fetch_all_not_retrieved => :environment do
+    Rake::Task["scheduler:fetch_not_retrieved_db1"].invoke
+    Rake::Task["scheduler:fetch_not_retrieved_votes"].invoke
+  end
+
+  desc "Update all retrieved votes"
+  task :fetch_all_retrieved => :environment do
+    Rake::Task["scheduler:fetch_retrieved_db1"].invoke
+    Rake::Task["scheduler:fetch_retrieved_votes"].invoke
   end
 
   def fetch_province()
