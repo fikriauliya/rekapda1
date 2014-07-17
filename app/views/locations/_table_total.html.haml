@@ -1,20 +1,43 @@
 %td
 %td
 %td.right-aligned
+  = number_with_delimiter(@prabowo_db1_sum, delimiter: ",")
+  %br
+  %span{"style" => yellow_background_for_max(@prabowo_db1_sum, @jokowi_db1_sum)}
+    = (@prabowo_db1_sum * 100 / ((@prabowo_db1_sum + @jokowi_db1_sum) * 1.0)).round(2)
+    \%
+%td.right-aligned
   = number_with_delimiter(@prabowo_sum, delimiter: ",")
+  %br
+  %span{"style" => yellow_background_for_max(@prabowo_sum, @jokowi_sum)}
+    = (@prabowo_sum * 100 / ((@prabowo_sum + @jokowi_sum) * 1.0)).round(2)
+    \%
 %td
-%td.right-aligned{"style" => yellow_background_for_max(@prabowo_sum, @jokowi_sum)}
-  = (@prabowo_sum * 100 / ((@prabowo_sum + @jokowi_sum) * 1.0)).round(2)
-  \%
+%td.right-aligned
+  = number_with_delimiter(@jokowi_db1_sum, delimiter: ",")
+  %br
+    %span{"style" => yellow_background_for_max(@jokowi_db1_sum, @prabowo_db1_sum)}
+      = (@jokowi_db1_sum * 100 / ((@prabowo_db1_sum + @jokowi_db1_sum) * 1.0)).round(2)
+      \%
 %td.right-aligned
   = number_with_delimiter(@jokowi_sum, delimiter: ",")
+  %br
+  %span{"style" => yellow_background_for_max(@jokowi_sum, @prabowo_sum)}
+    = (@jokowi_sum * 100 / ((@prabowo_sum + @jokowi_sum) * 1.0)).round(2)
+    \%
 %td
-%td.right-aligned{"style" => yellow_background_for_max(@jokowi_sum, @prabowo_sum)}
-  = (@jokowi_sum * 100 / ((@prabowo_sum + @jokowi_sum) * 1.0)).round(2)
+%td
+%td
+  = @fetched_db1_count_sum
+  \/
+  = @total_db1_count_sum
+  %br
+  = (@fetched_db1_count_sum * 100/(@total_db1_count_sum * 1.0)).round(2)
   \%
-%td
 %td
   = @fetched_count_sum
   \/
   = @total_count_sum
-%td= "(#{(@fetched_count_sum * 100/(@total_count_sum * 1.0)).round(2)} %)"
+  %br
+  = (@fetched_count_sum * 100/(@total_count_sum * 1.0)).round(2)
+  \%

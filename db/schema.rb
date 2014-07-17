@@ -11,10 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140715044635) do
+ActiveRecord::Schema.define(version: 20140716234949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "db1s", force: true do |t|
+    t.integer  "province_id"
+    t.integer  "kabupaten_id"
+    t.integer  "prabowo_count",   default: 0
+    t.integer  "jokowi_count",    default: 0
+    t.datetime "last_fetched_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "fetch_statuses", force: true do |t|
     t.integer  "to_be_updated_index"

@@ -1,23 +1,46 @@
 %td.right-aligned
+  -if db1
+    = number_with_delimiter(db1.sum_prabowo_count, delimiter: ",")
+    %br
+    %span{"style" => yellow_background_for_max(db1.sum_prabowo_count, db1.sum_jokowi_count)}
+      = (db1.sum_prabowo_count * 100 / ((db1.sum_prabowo_count + db1.sum_jokowi_count) * 1.0)).round(2)
+      \%
+%td.right-aligned
   = number_with_delimiter(location.sum_prabowo_count, delimiter: ",")
+  %br
+  %span{"style" => yellow_background_for_max(location.sum_prabowo_count, location.sum_jokowi_count)}
+    = (location.sum_prabowo_count * 100 / ((location.sum_prabowo_count + location.sum_jokowi_count) * 1.0)).round(2)
+    \%
 %td.grey.right-aligned.c1_prabowo
-%td.right-aligned{"style" => yellow_background_for_max(location.sum_prabowo_count, location.sum_jokowi_count)}
-  = (location.sum_prabowo_count * 100 / ((location.sum_prabowo_count + location.sum_jokowi_count) * 1.0)).round(2)
-  \%
+%td.right-aligned
+  -if db1
+    = number_with_delimiter(db1.sum_jokowi_count, delimiter: ",")
+    %br
+    %span{"style" => yellow_background_for_max(db1.sum_jokowi_count, db1.sum_prabowo_count)}
+      = (db1.sum_jokowi_count * 100 / ((db1.sum_prabowo_count + db1.sum_jokowi_count) * 1.0)).round(2)
+      \%
 %td.right-aligned
   = number_with_delimiter(location.sum_jokowi_count, delimiter: ",")
+  %br
+  %span{"style" => yellow_background_for_max(location.sum_jokowi_count, location.sum_prabowo_count)}
+    = (location.sum_jokowi_count * 100 / ((location.sum_prabowo_count + location.sum_jokowi_count) * 1.0)).round(2)
+    \%
 %td.grey.right-aligned.c1_jokowi
-%td.right-aligned{"style" => yellow_background_for_max(location.sum_jokowi_count, location.sum_prabowo_count)}
-  = (location.sum_jokowi_count * 100 / ((location.sum_prabowo_count + location.sum_jokowi_count) * 1.0)).round(2)
-  \%
 %td
   - if location.max_last_fetched_at
     = (location.max_last_fetched_at.in_time_zone("Jakarta").strftime("%d %b, %H:%M"))
   - else
     Pending..
 %td
+  -if db1
+    = db1.fetched_count
+    \/
+    = db1.total_count
+    %br
+    = "#{(db1.fetched_count * 100/ (db1.total_count * 1.0)).round(2)} %"
+%td
   = location.fetched_count
   \/
   = location.total_count
-%td
-  = "(#{(location.fetched_count * 100/ (location.total_count * 1.0)).round(2)} %)"
+  %br
+  = "#{(location.fetched_count * 100/ (location.total_count * 1.0)).round(2)} %"

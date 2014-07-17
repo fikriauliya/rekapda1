@@ -32,6 +32,50 @@ namespace :scheduler do
     end
   end
 
+  def update_db1(db1)
+    begin
+      grand_parent = db1.province_id
+      parent = db1.kabupaten_id
+      puts("Fetch #{db1.province.name} > #{db1.kabupaten.name}")
+
+      response = HTTParty.get("http://pilpres2014.kpu.go.id/db1.php?cmd=select&grandparent=#{grand_parent}&parent=#{parent}")
+      # puts response.body
+      doc = Nokogiri::HTML(response.body)
+      last_table = doc.search('table').last
+
+      # table_headers = last_table.xpath("tr[3]/th")
+      # city_names = table_headers[2..-1].map { |h| h.children.to_s}
+      prabowo_votes = last_table.xpath("tr[4]/td")[-1].children.to_s.to_i
+      jokowi_votes = last_table.xpath("tr[5]/td")[-1].children.to_s.to_i
+      total_votes = last_table.xpath("tr[6]/td")[-1].children.to_s.to_i
+      puts "Prabowo: " + prabowo_votes.to_s
+      puts "Jokowi: " + jokowi_votes.to_s
+      puts "Total: " + total_votes.to_s
+
+      db1.last_fetched_at = Time.now
+
+      if db1.prabowo_count != prabowo_votes or db1.jokowi_count != jokowi_votes
+        puts "Update..."
+        db1.prabowo_count = prabowo_votes
+        db1.jokowi_count = jokowi_votes
+        db1.save
+      end
+    rescue Exception => e
+      puts e.message
+    end
+  end
+
+  desc "Fetch not retrieved db1 only"
+  task :fetch_not_retrieved_db1 => :environment do
+    puts "Fetch..."
+    @db1s = Db1.includes([:province, :kabupaten]).where(:last_fetched_at => nil)
+
+    Parallel.each(@db1s, :in_threads => 8) do |db1|
+      update_db1(db1)
+    end
+    puts "Done.."
+  end
+
   desc "Fetch not retrieved votes only"
   task :fetch_not_retrieved_votes => :environment do
     puts "Fetch..."

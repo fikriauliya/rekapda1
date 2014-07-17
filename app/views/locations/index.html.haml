@@ -23,6 +23,9 @@
   DA1 adalah hasil rekapitulasi suara per kecamatan yang merupakan hasil yang telah diplenokan pada tingkatannya.
   DA1 berisi rekapitulasi beberapa formulir C1 pada tingkat kecamatan
 %p
+  DB1 adalah hasil rekapitulasi suara per kabupaten yang merupakan hasil yang telah diplenokan pada tingkatannya.
+  DB1 berisi rekapitulasi beberapa formulir DA1 pada tingkat kabupaten
+%p
   Data ini diambil dari Website KPU berikut:
   =link_to "http://pilpres2014.kpu.go.id/da1.php", "http://pilpres2014.kpu.go.id/da1.php"
   \. Data diupdate secara otomatis oleh program setiap 1 jam
@@ -38,39 +41,36 @@
   Sementara formulir DA1 adalah rekapitulasi input C1 yang dilakukan oleh KPU, di mana KPU bisa jadi telah mengkoreksi sebagian kesalahan pada C1.
   Jika ada perbedaan dalam keduanya, bisa dicek data hingga level kecamatan, kemudian dibandingkan untuk saling mengkoreksi.
 
-%table{:cellspacing => 10}
-  %tr
-    %th Prabowo
-    %th Jokowi
-    %th
-  %tr
-    %td= number_with_delimiter(@prabowo_sum, delimiter: ",")
-    %td= number_with_delimiter(@jokowi_sum, delimiter: ",")
-    %td
-      .addthis_sharing_toolbox
+.addthis_sharing_toolbox
 
 %hr
 %div{"style" => "width:1100px; float:left"}
   -if @view_mode == :national
     %table#rekap{:cellspacing => 10}
       %tr
+        %th
+        %th
+        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Prabowo
+        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Jokowi
+      %tr
         %th No
         %th Provinsi
-        %th Prabowo
+        %th DB1
+        %th DA1
         %th C1
-        %th %
-        %th Jokowi
+        %th DB1
+        %th DA1
         %th C1
-        %th %
         %th Updated
-        %th{'colspan' => 2} Formulir lengkap
+        %th DB1%
+        %th DA1%
 
       - @locations.each_with_index do |location, index|
         %tr
           %td= index + 1
           %td
             = link_to location.province.name, locations_index_path(:province => location.province.id)
-          = render :partial => 'locations/row_detail', locals: {location: location}
+          = render :partial => 'locations/row_detail', locals: {location: location, db1: @db1s[index]}
       %tr
         = render :partial => 'locations/table_total'
   -elsif @view_mode == :province
@@ -78,20 +78,21 @@
       %tr
         %th No
         %th Kabupaten
-        %th Prabowo
+        %th DB1
+        %th DA1
         %th C1
-        %th %
-        %th Jokowi
+        %th DB1
+        %th DA1
         %th C1
-        %th %
         %th Updated
-        %th{'colspan' => 2} Formulir lengkap
+        %th DB1%
+        %th DA1%
 
       - @locations.each_with_index do |location, index|
         %tr
           %td= index + 1
           %td= link_to location.kabupaten.name, locations_index_path(:province => params[:province], :kabupaten => location.kabupaten.id)
-          = render :partial => 'locations/row_detail', locals: {location: location}
+          = render :partial => 'locations/row_detail', locals: {location: location, db1: @db1s[index]}
       %tr
         = render :partial => 'locations/table_total'
   -elsif @view_mode == :kabupaten
@@ -99,20 +100,21 @@
       %tr
         %th No
         %th Kecamatan
-        %th Prabowo
+        %th DB1
+        %th DA1
         %th C1
-        %th %
-        %th Jokowi
+        %th DB1
+        %th DA1
         %th C1
-        %th %
         %th Updated
-        %th{'colspan' => 2} Formulir lengkap
+        %th DB1%
+        %th DA1%
 
       - @locations.each_with_index do |location, index|
         %tr
           %td= index + 1
           %td= link_to location.kecamatan.name, location.detail_url
-          = render :partial => 'locations/row_detail', locals: {location: location}
+          = render :partial => 'locations/row_detail', locals: {location: location, db1: @db1s[index]}
       %tr
         = render :partial => 'locations/table_total'
 %div{"style" => "float:left"}
