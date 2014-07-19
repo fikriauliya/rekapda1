@@ -42,21 +42,20 @@
 %td.grey.right-aligned.c1_jokowi
 %td
   -if dc1
-    = dc1.fetched_count
-    \/
-    = dc1.total_count
+    = "#{(dc1.fetched_count * 100/ (dc1.total_count * 1.0)).round(2)}"
     %br
-    = "#{(dc1.fetched_count * 100/ (dc1.total_count * 1.0)).round(2)} %"
+      -if dc1.max_last_fetched_at
+        = (dc1.max_last_fetched_at.in_time_zone("Jakarta").strftime("%d/%m %H:%M"))
+
 %td
   -if db1
-    = db1.fetched_count
-    \/
-    = db1.total_count
+    = "#{(db1.fetched_count * 100/ (db1.total_count * 1.0)).round(2)}"
     %br
-    = "#{(db1.fetched_count * 100/ (db1.total_count * 1.0)).round(2)} %"
+      -if db1.max_last_fetched_at
+        = (db1.max_last_fetched_at.in_time_zone("Jakarta").strftime("%d/%m %H:%M"))
+
 %td
-  = location.fetched_count
-  \/
-  = location.total_count
+  = "#{(location.fetched_count * 100/ (location.total_count * 1.0)).round(2)}"
   %br
-  = "#{(location.fetched_count * 100/ (location.total_count * 1.0)).round(2)} %"
+  -if location.max_last_fetched_at
+    = (location.max_last_fetched_at.in_time_zone("Jakarta").strftime("%d/%m %H:%M"))
