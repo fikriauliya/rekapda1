@@ -1,5 +1,7 @@
 namespace :scheduler do
-  def update_votes(location)
+  # THIS FILE NEED TO BE REFACTORED!!!
+  
+  def update_da1(location)
     begin
       grand_parent = location.kabupaten_id
       parent = location.kecamatan_id
@@ -143,41 +145,23 @@ namespace :scheduler do
   end
 
   desc "Fetch not retrieved da1 only"
-  task :fetch_not_retrieved_votes => :environment do
+  task :fetch_not_retrieved_da1 => :environment do
     puts "Fetch..."
     @locations = Location.includes([:kecamatan, :province, :kabupaten]).where(:last_fetched_at => nil)
 
     Parallel.each(@locations, :in_threads => 8) do |location|
-      update_votes(location)
+      update_da1(location)
     end
     puts "Done.."
   end
 
   desc "Fetch retrieved da1 only"
-  task :fetch_retrieved_votes => :environment do
+  task :fetch_retrieved_da1 => :environment do
     puts "Fetch..."
     @locations = Location.includes([:kecamatan, :province, :kabupaten]).where('last_fetched_at IS NOT NULL')
 
     Parallel.each(@locations, :in_threads => 8) do |location|
-      update_votes(location)
-    end
-    puts "Done.."
-  end
-
-  desc "This task is called by the Heroku scheduler add-on"
-  task :fetch_votes => :environment do
-    puts "Fetch..."
-    max_counter = Location.count/6
-
-    max_counter.times do
-      counter = FetchStatus.first.to_be_updated_index
-      if counter > max_counter then
-        counter = 0
-      end
-
-      location = Location.offset(counter).first
-      update_votes(location)
-      FetchStatus.first.update(:to_be_updated_index => location.id + 1)
+      update_da1(location)
     end
     puts "Done.."
   end
@@ -191,14 +175,14 @@ namespace :scheduler do
   task :fetch_all_not_retrieved => :environment do
     Rake::Task["scheduler:fetch_not_retrieved_dc1"].invoke
     Rake::Task["scheduler:fetch_not_retrieved_db1"].invoke
-    Rake::Task["scheduler:fetch_not_retrieved_votes"].invoke
+    Rake::Task["scheduler:fetch_not_retrieved_da1"].invoke
   end
 
   desc "Update all retrieved votes"
   task :fetch_all_retrieved => :environment do
     Rake::Task["scheduler:fetch_retrieved_dc1"].invoke
     Rake::Task["scheduler:fetch_retrieved_db1"].invoke
-    Rake::Task["scheduler:fetch_retrieved_votes"].invoke
+    Rake::Task["scheduler:fetch_retrieved_da1"].invoke
   end
 
   def fetch_province()
