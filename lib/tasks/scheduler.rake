@@ -65,6 +65,61 @@ namespace :scheduler do
     end
   end
 
+  def update_dc1(dc1)
+    begin
+      grand_parent = 0
+      parent = dc1.province_id
+      puts("Fetch #{dc1.province.name}")
+
+      response = HTTParty.get("http://pilpres2014.kpu.go.id/dc1.php?cmd=select&grandparent=#{grand_parent}&parent=#{parent}")
+      # puts response.body
+      doc = Nokogiri::HTML(response.body)
+      last_table = doc.search('table').last
+
+      # table_headers = last_table.xpath("tr[3]/th")
+      # city_names = table_headers[2..-1].map { |h| h.children.to_s}
+      prabowo_votes = last_table.xpath("tr[4]/td")[-1].children.to_s.to_i
+      jokowi_votes = last_table.xpath("tr[5]/td")[-1].children.to_s.to_i
+      total_votes = last_table.xpath("tr[6]/td")[-1].children.to_s.to_i
+      puts "Prabowo: " + prabowo_votes.to_s
+      puts "Jokowi: " + jokowi_votes.to_s
+      puts "Total: " + total_votes.to_s
+
+      dc1.last_fetched_at = Time.now
+
+      if dc1.prabowo_count != prabowo_votes or dc1.jokowi_count != jokowi_votes
+        puts "Update..."
+        dc1.prabowo_count = prabowo_votes
+        dc1.jokowi_count = jokowi_votes
+        dc1.save
+      end
+    rescue Exception => e
+      puts e.message
+    end
+  end
+
+  desc "Fetch not retrieved dc1 only"
+  task :fetch_not_retrieved_dc1 => :environment do
+    puts "Fetch..."
+    @dc1s = Dc1.includes([:province]).where(:last_fetched_at => nil)
+
+    Parallel.each(@dc1s, :in_threads => 8) do |dc1|
+      update_dc1(dc1)
+    end
+    puts "Done.."
+  end
+
+  desc "Fetch retrieved dc1 only"
+  task :fetch_retrieved_dc1 => :environment do
+    puts "Fetch..."
+    @dc1s = Dc1.includes([:province]).where('last_fetched_at IS NOT NULL')
+
+    Parallel.each(@dc1s, :in_threads => 8) do |dc1|
+      update_dc1(dc1)
+    end
+    puts "Done.."
+  end
+
   desc "Fetch not retrieved db1 only"
   task :fetch_not_retrieved_db1 => :environment do
     puts "Fetch..."
@@ -134,12 +189,14 @@ namespace :scheduler do
 
   desc "Fetch all unretrieved votes"
   task :fetch_all_not_retrieved => :environment do
+    Rake::Task["scheduler:fetch_not_retrieved_dc1"].invoke
     Rake::Task["scheduler:fetch_not_retrieved_db1"].invoke
     Rake::Task["scheduler:fetch_not_retrieved_votes"].invoke
   end
 
   desc "Update all retrieved votes"
   task :fetch_all_retrieved => :environment do
+    Rake::Task["scheduler:fetch_retrieved_dc1"].invoke
     Rake::Task["scheduler:fetch_retrieved_db1"].invoke
     Rake::Task["scheduler:fetch_retrieved_votes"].invoke
   end

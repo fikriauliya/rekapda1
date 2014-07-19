@@ -1,6 +1,12 @@
 %td
 %td
 %td.right-aligned
+  = number_with_delimiter(@prabowo_dc1_sum, delimiter: ",")
+  %br
+  %span{"style" => yellow_background_for_max(@prabowo_dc1_sum, @jokowi_dc1_sum)}
+    = (@prabowo_dc1_sum * 100 / ((@prabowo_dc1_sum + @jokowi_dc1_sum) * 1.0)).round(2)
+    \%
+%td.right-aligned
   = number_with_delimiter(@prabowo_db1_sum, delimiter: ",")
   %br
   %span{"style" => yellow_background_for_max(@prabowo_db1_sum, @jokowi_db1_sum)}
@@ -13,6 +19,12 @@
     = (@prabowo_sum * 100 / ((@prabowo_sum + @jokowi_sum) * 1.0)).round(2)
     \%
 %td
+%td.right-aligned
+  = number_with_delimiter(@jokowi_dc1_sum, delimiter: ",")
+  %br
+    %span{"style" => yellow_background_for_max(@jokowi_dc1_sum, @prabowo_dc1_sum)}
+      = (@jokowi_dc1_sum * 100 / ((@prabowo_dc1_sum + @jokowi_dc1_sum) * 1.0)).round(2)
+      \%
 %td.right-aligned
   = number_with_delimiter(@jokowi_db1_sum, delimiter: ",")
   %br
@@ -27,6 +39,12 @@
     \%
 %td
 %td
+  = @fetched_dc1_count_sum
+  \/
+  = @total_dc1_count_sum
+  %br
+  = (@fetched_dc1_count_sum * 100/(@total_dc1_count_sum * 1.0)).round(2)
+  \%
 %td
   = @fetched_db1_count_sum
   \/

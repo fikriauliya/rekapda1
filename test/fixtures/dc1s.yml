@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  province_id: 1
+  prabowo_count: 1
+  jokowi_count: 1
+  last_fetched_at: 2014-07-19 12:53:51
+
+two:
+  province_id: 1
+  prabowo_count: 1
+  jokowi_count: 1
+  last_fetched_at: 2014-07-19 12:53:51

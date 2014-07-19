@@ -11,6 +11,7 @@ class LocationsController < ApplicationController
           group(:province_id, :kabupaten_id, :kecamatan_id).
           order(:kecamatan_id)
       @db1s = []
+      @dc1s = []
 
       @province_name = Province.find(params[:province]).name
       @kabupaten_name = Kabupaten.find(params[:kabupaten]).name
@@ -35,6 +36,7 @@ class LocationsController < ApplicationController
           where(:province_id => params[:province]).
           group(:province_id, :kabupaten_id).
           order(:kabupaten_id)
+      @dc1s = []
 
       @province_name = Province.find(params[:province]).name
 
@@ -56,6 +58,13 @@ class LocationsController < ApplicationController
                                              'count(*) as total_count').
           group(:province_id).
           order(:province_id)
+      @dc1s = Dc1.select('province_id',
+                           'sum(jokowi_count) as sum_jokowi_count', 'sum(prabowo_count) as sum_prabowo_count',
+                           'max(last_fetched_at) as max_last_fetched_at',
+                           'count(last_fetched_at) as fetched_count',
+                           'count(*) as total_count').
+          group(:province_id).
+          order(:province_id)
 
       gon.id = 0
     end
@@ -65,16 +74,28 @@ class LocationsController < ApplicationController
     @fetched_count_sum = @locations.inject(0) { |sum, val| sum += val.fetched_count }
     @total_count_sum = @locations.inject(0) { |sum, val| sum += val.total_count }
 
-    if (params[:province] and params[:kabupaten])
-      @prabowo_db1_sum = 0
-      @jokowi_db1_sum = 0
-      @fetched_db1_count_sum = 0
-      @total_db1_count_sum = 0
-    else
+    @prabowo_db1_sum = 0
+    @jokowi_db1_sum = 0
+    @fetched_db1_count_sum = 0
+    @total_db1_count_sum = 0
+
+    @prabowo_dc1_sum = 0
+    @jokowi_dc1_sum = 0
+    @fetched_dc1_count_sum = 0
+    @total_dc1_count_sum = 0
+
+    unless (params[:province] and params[:kabupaten])
       @prabowo_db1_sum = @db1s.inject(0) { |sum, val| sum += val.sum_prabowo_count }
       @jokowi_db1_sum = @db1s.inject(0) { |sum, val| sum += val.sum_jokowi_count }
       @fetched_db1_count_sum = @db1s.inject(0) { |sum, val| sum += val.fetched_count }
       @total_db1_count_sum = @db1s.inject(0) { |sum, val| sum += val.total_count }
+    end
+
+    unless (params[:province] or params[:kabupaten])
+      @prabowo_dc1_sum = @dc1s.inject(0) { |sum, val| sum += val.sum_prabowo_count }
+      @jokowi_dc1_sum = @dc1s.inject(0) { |sum, val| sum += val.sum_jokowi_count }
+      @fetched_dc1_count_sum = @dc1s.inject(0) { |sum, val| sum += val.fetched_count }
+      @total_dc1_count_sum = @dc1s.inject(0) { |sum, val| sum += val.total_count }
     end
   end
 end

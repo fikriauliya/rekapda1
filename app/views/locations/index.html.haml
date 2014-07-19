@@ -44,24 +44,26 @@
 .addthis_sharing_toolbox
 
 %hr
-%div{"style" => "width:1100px; float:left"}
+%div{"style" => "width:1200px; float:left"}
   -if @view_mode == :national
     %table#rekap{:cellspacing => 10}
       %tr
         %th
         %th
-        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Prabowo
-        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Jokowi
+        %th{'colspan' => 4, 'style' => 'background: darkgrey'} Prabowo
+        %th{'colspan' => 4, 'style' => 'background: darkgrey'} Jokowi
       %tr
         %th No
         %th Provinsi
+        %th DC1
         %th DB1
         %th DA1
         %th C1
+        %th DC1
         %th DB1
         %th DA1
         %th C1
-        %th Updated
+        %th DC1%
         %th DB1%
         %th DA1%
 
@@ -70,7 +72,7 @@
           %td= index + 1
           %td
             = link_to location.province.name, locations_index_path(:province => location.province.id)
-          = render :partial => 'locations/row_detail', locals: {location: location, db1: @db1s[index]}
+          = render :partial => 'locations/row_detail', locals: {location: location, db1: @db1s[index], dc1: @dc1s[index]}
       %tr
         = render :partial => 'locations/table_total'
   -elsif @view_mode == :province
@@ -78,18 +80,20 @@
       %tr
         %th
         %th
-        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Prabowo
-        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Jokowi
+        %th{'colspan' => 4, 'style' => 'background: darkgrey'} Prabowo
+        %th{'colspan' => 4, 'style' => 'background: darkgrey'} Jokowi
       %tr
         %th No
         %th Kabupaten
+        %th DC1
         %th DB1
         %th DA1
         %th C1
+        %th DC1
         %th DB1
         %th DA1
         %th C1
-        %th Updated
+        %th DC1%
         %th DB1%
         %th DA1%
 
@@ -97,7 +101,7 @@
         %tr
           %td= index + 1
           %td= link_to location.kabupaten.name, locations_index_path(:province => params[:province], :kabupaten => location.kabupaten.id)
-          = render :partial => 'locations/row_detail', locals: {location: location, db1: @db1s[index]}
+          = render :partial => 'locations/row_detail', locals: {location: location, db1: @db1s[index], dc1: @dc1s[index]}
       %tr
         = render :partial => 'locations/table_total'
   -elsif @view_mode == :kabupaten
@@ -105,18 +109,20 @@
       %tr
         %th
         %th
-        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Prabowo
-        %th{'colspan' => 3, 'style' => 'background: darkgrey'} Jokowi
+        %th{'colspan' => 4, 'style' => 'background: darkgrey'} Prabowo
+        %th{'colspan' => 4, 'style' => 'background: darkgrey'} Jokowi
       %tr
         %th No
         %th Kecamatan
+        %th DC1
         %th DB1
         %th DA1
         %th C1
+        %th DC1
         %th DB1
         %th DA1
         %th C1
-        %th Updated
+        %th DC1%
         %th DB1%
         %th DA1%
 
@@ -124,7 +130,7 @@
         %tr
           %td= index + 1
           %td= link_to location.kecamatan.name, location.detail_url
-          = render :partial => 'locations/row_detail', locals: {location: location, db1: @db1s[index]}
+          = render :partial => 'locations/row_detail', locals: {location: location, db1: @db1s[index], dc1: @dc1s[index]}
       %tr
         = render :partial => 'locations/table_total'
 %div{"style" => "float:left"}
